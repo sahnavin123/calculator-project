@@ -41,22 +41,15 @@ const updateDisplay = (value) => {
 };
 
 const backspace = () => {
-  if (operator === "") {
-    firstNumber = firstNumber.slice(0, firstNumber.length - 1);
-    if (firstNumber === "") {
-      clearDisplay();
-    } else {
-      display.textContent = firstNumber;
-    }
-  } else {
-    secondNumber = secondNumber.slice(0, secondNumber.length - 1);
-    if (secondNumber === "") {
-      operator = "";
-      display.textContent = firstNumber;
-    } else {
-      display.textContent = secondNumber;
-    }
+  if (secondNumber !== "") {
+    secondNumber = secondNumber.slice(0, -1);
+  } else if (operator !== "") {
+    operator = "";
+    display.textContent = firstNumber;
+  } else if (firstNumber !== "") {
+    firstNumber = firstNumber.slice(0, -1);
   }
+  display.textContent = `${firstNumber}${operator}${secondNumber}`;
 };
 
 buttons.forEach((button) => {
