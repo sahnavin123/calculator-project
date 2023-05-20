@@ -83,14 +83,7 @@ buttons.forEach((button) => {
       case buttonValue === "=":
         handleEqualsButton();
         break;
-      case buttonValue === "+":
-        handleOperatorButton(buttonValue);
-        break;
-      case buttonValue === "-":
-        handleSubtraction();
-        break;
-      case buttonValue === "*":
-      case buttonValue === "/":
+      case isOperatorButton(buttonValue):
         handleOperatorButton(buttonValue);
         break;
     }
@@ -101,12 +94,23 @@ const isNumericButton = (buttonValue) => {
   return buttonValue >= "0" && buttonValue <= "9";
 };
 
+const isOperatorButton = (buttonValue) => {
+  return (
+    buttonValue === "+" ||
+    buttonValue === "-" ||
+    buttonValue === "*" ||
+    buttonValue === "/"
+  );
+};
+
 const handleNumericButton = (buttonValue) => {
   updateDisplay(buttonValue);
 
   operator === ""
     ? (firstNumber += buttonValue)
     : (secondNumber += buttonValue);
+
+  display.textContent = `${firstNumber}${operator}${secondNumber}`;
 };
 
 const handleDecimalButton = () => {
@@ -114,6 +118,8 @@ const handleDecimalButton = () => {
     updateDisplay(".");
 
     operator === "" ? (firstNumber += ".") : (secondNumber += ".");
+
+    display.textContent = `${firstNumber}${operator}${secondNumber}`;
   }
 };
 
@@ -133,19 +139,13 @@ const handleEqualsButton = () => {
 };
 
 const handleOperatorButton = (buttonValue) => {
-  operator = buttonValue;
-  updateDisplay(buttonValue);
-};
+  if (firstNumber === "") {
+    display.textContent = "Error: Write number before digits!";
+    return;
+  }
 
-const handleSubtraction = () => {
-  operator === "" && firstNumber === "" && secondNumber === ""
-    ? ((firstNumber = "-"), updateDisplay("-"))
-    : operator === "" && firstNumber !== "" && secondNumber === ""
-    ? ((operator = "-"), updateDisplay("-"))
-    : null;
+  operator !== ""
+    ? ((display.textContent = `${firstNumber}${buttonValue}${secondNumber}`),
+      (operator = buttonValue))
+    : ((operator = buttonValue), updateDisplay(buttonValue));
 };
-
-const subtractionButton = document.querySelector("button[value='-']");
-subtractionButton.addEventListener("click", () => {
-  handleSubtraction();
-});
