@@ -140,7 +140,7 @@ const handleEqualsButton = () => {
 
 const handleOperatorButton = (buttonValue) => {
   if (firstNumber === "") {
-    display.textContent = "Error: Write number before digits!";
+    display.textContent = "Please write number before operator!";
     return;
   }
 
