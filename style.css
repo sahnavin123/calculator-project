@@ -10,7 +10,7 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
-  max-width: 400px;
+  width: 380px;
   margin: 0 auto;
   text-align: center;
   padding: 10px;
@@ -23,6 +23,24 @@ body {
   font-size: 24px;
   padding: 10px;
   background-color: #eee;
+}
+
+.calculator .clear{
+  background-color: rgb(251, 64, 64);
+  color: white;
+}
+
+.calculator .clear:hover{
+  background-color: rgb(250, 36, 36);
+}
+
+.calculator .operators{
+  background-color: gray;
+  color: white;
+}
+
+.calculator .operators:hover{
+  background-color: rgb(80, 78, 78);
 }
 
 button {
@@ -44,4 +62,10 @@ button:hover {
 
 .calculator .backspace {
   grid-column: 3 / span 2;
+  background-color: rgb(87, 113, 198);
+  color: white;
+}
+
+.calculator .backspace:hover{
+  background-color: rgb(74, 114, 245);
 }

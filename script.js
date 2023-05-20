@@ -65,7 +65,7 @@ const backspace = () => {
 
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
-    const buttonValue = e.target.textContent;
+    const buttonValue = e.target.value;
 
     switch (true) {
       case button.classList.contains("clear"):
@@ -114,13 +114,13 @@ const handleNumericButton = (buttonValue) => {
 };
 
 const handleDecimalButton = () => {
-  if (!display.textContent.includes(".")) {
-    updateDisplay(".");
-
-    operator === "" ? (firstNumber += ".") : (secondNumber += ".");
-
-    display.textContent = `${firstNumber}${operator}${secondNumber}`;
-  }
+  firstNumber === ""
+    ? (display.textContent = `Write a valid number befor "."`)
+    : !display.textContent.includes(".")
+    ? (updateDisplay("."),
+      operator === "" ? (firstNumber += ".") : (secondNumber += "."),
+      (display.textContent = `${firstNumber}${operator}${secondNumber}`))
+    : null;
 };
 
 const handleEqualsButton = () => {
