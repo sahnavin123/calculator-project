@@ -114,13 +114,24 @@ const handleNumericButton = (buttonValue) => {
 };
 
 const handleDecimalButton = () => {
-  firstNumber === ""
-    ? (display.textContent = `Write a valid number befor "."`)
-    : !display.textContent.includes(".")
-    ? (updateDisplay("."),
-      operator === "" ? (firstNumber += ".") : (secondNumber += "."),
-      (display.textContent = `${firstNumber}${operator}${secondNumber}`))
-    : null;
+  if (
+    firstNumber.length >= 1 &&
+    !firstNumber.includes(".") &&
+    operator === "" &&
+    secondNumber === ""
+  ) {
+    updateDisplay(".");
+    firstNumber += ".";
+    display.textContent = `${firstNumber}${operator}${secondNumber}`;
+  } else if (
+    operator !== "" &&
+    secondNumber.length >= 1 &&
+    !secondNumber.includes(".")
+  ) {
+    updateDisplay(".");
+    secondNumber += ".";
+    display.textContent = `${firstNumber}${operator}${secondNumber}`;
+  }
 };
 
 const handleEqualsButton = () => {
