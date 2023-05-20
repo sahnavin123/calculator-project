@@ -41,55 +41,111 @@ const updateDisplay = (value) => {
 };
 
 const backspace = () => {
-  if (secondNumber !== "") {
-    secondNumber = secondNumber.slice(0, -1);
-  } else if (operator !== "") {
-    operator = "";
-    display.textContent = firstNumber;
-  } else if (firstNumber !== "") {
-    firstNumber = firstNumber.slice(0, -1);
+  switch (true) {
+    case secondNumber !== "":
+      secondNumber = secondNumber.slice(0, -1);
+      break;
+    case operator !== "":
+      operator = "";
+      display.textContent = firstNumber;
+      break;
+    case firstNumber !== "":
+      firstNumber = firstNumber.slice(0, -1);
+      break;
+    default:
+      display.textContent = "0";
+      break;
   }
-  display.textContent = `${firstNumber}${operator}${secondNumber}`;
+
+  display.textContent =
+    firstNumber === "" && operator === "" && secondNumber === ""
+      ? "0"
+      : `${firstNumber}${operator}${secondNumber}`;
 };
 
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
     const buttonValue = e.target.textContent;
-    if (button.classList.contains("clear")) {
-      clearDisplay();
-    } else if (button.classList.contains("backspace")) {
-      backspace();
-    } else if (buttonValue >= "0" && buttonValue <= "9") {
-      updateDisplay(buttonValue);
-      if (operator === "") {
-        firstNumber += buttonValue;
-      } else {
-        secondNumber += buttonValue;
-      }
-    } else if (buttonValue === ".") {
-      if (!display.textContent.includes(".")) {
-        updateDisplay(buttonValue);
-        if (operator === "") {
-          firstNumber += buttonValue;
-        } else {
-          secondNumber += buttonValue;
-        }
-      }
-    } else if (buttonValue === "=") {
-      if (operator !== "" && secondNumber !== "") {
-        result = operate(
-          operator,
-          parseFloat(firstNumber),
-          parseFloat(secondNumber)
-        );
-        display.textContent = result;
-        firstNumber = result.toString();
-        operator = "";
-        secondNumber = "";
-      }
-    } else {
-      operator = buttonValue;
-      updateDisplay(buttonValue);
+
+    switch (true) {
+      case button.classList.contains("clear"):
+        clearDisplay();
+        break;
+      case button.classList.contains("backspace"):
+        backspace();
+        break;
+      case isNumericButton(buttonValue):
+        handleNumericButton(buttonValue);
+        break;
+      case buttonValue === ".":
+        handleDecimalButton();
+        break;
+      case buttonValue === "=":
+        handleEqualsButton();
+        break;
+      case buttonValue === "+":
+        handleOperatorButton(buttonValue);
+        break;
+      case buttonValue === "-":
+        handleSubtraction();
+        break;
+      case buttonValue === "*":
+      case buttonValue === "/":
+        handleOperatorButton(buttonValue);
+        break;
     }
   });
+});
+
+const isNumericButton = (buttonValue) => {
+  return buttonValue >= "0" && buttonValue <= "9";
+};
+
+const handleNumericButton = (buttonValue) => {
+  updateDisplay(buttonValue);
+
+  operator === ""
+    ? (firstNumber += buttonValue)
+    : (secondNumber += buttonValue);
+};
+
+const handleDecimalButton = () => {
+  if (!display.textContent.includes(".")) {
+    updateDisplay(".");
+
+    operator === "" ? (firstNumber += ".") : (secondNumber += ".");
+  }
+};
+
+const handleEqualsButton = () => {
+  if (operator !== "" && secondNumber !== "") {
+    result = operate(
+      operator,
+      parseFloat(firstNumber),
+      parseFloat(secondNumber)
+    );
+    display.textContent = result;
+    firstNumber = result.toString();
+    operator = "";
+    secondNumber = "";
+    result = "";
+  }
+};
+
+const handleOperatorButton = (buttonValue) => {
+  operator = buttonValue;
+  updateDisplay(buttonValue);
+};
+
+const handleSubtraction = () => {
+  operator === "" && firstNumber === "" && secondNumber === ""
+    ? ((firstNumber = "-"), updateDisplay("-"))
+    : operator === "" && firstNumber !== "" && secondNumber === ""
+    ? ((operator = "-"), updateDisplay("-"))
+    : null;
+};
+
+const subtractionButton = document.querySelector("button[value='-']");
+subtractionButton.addEventListener("click", () => {
+  handleSubtraction();
 });
