@@ -156,7 +156,8 @@ const handleOperatorButton = (buttonValue) => {
   }
 
   operator !== ""
-    ? ((display.textContent = `${firstNumber}${buttonValue}${secondNumber}`),
-      (operator = buttonValue))
+    ? (handleEqualsButton(),
+      (operator = buttonValue),
+      (display.textContent = `${firstNumber}${operator}${secondNumber}`))
     : ((operator = buttonValue), updateDisplay(buttonValue));
 };
